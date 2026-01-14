@@ -1,0 +1,283 @@
+/* ===================================
+   BIBLIOTECA DJANGO - ESTILOS PERSONALIZADOS
+   =================================== */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --dark-color: #212529;
+    --light-color: #f8f9fa;
+}
+
+/* General */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: white;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Libro Cards */
+.libro-card {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.libro-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.libro-card img {
+    transition: all 0.3s ease;
+}
+
+.libro-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Autor Cards */
+.autor-card {
+    transition: all 0.3s ease;
+}
+
+.autor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.jumbotron h1 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+}
+
+/* Tables */
+.table {
+    background-color: white;
+}
+
+.table-hover tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+    transform: scale(1.01);
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+footer a:hover {
+    color: white !important;
+    transition: color 0.3s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Loading Spinner */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.75rem 0;
+}
+
+.breadcrumb-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+/* Rounded Images */
+img.rounded-circle {
+    object-fit: cover;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0b5ed7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .jumbotron h1 {
+        font-size: 2rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}
+
+/* Opacity utilities */
+.opacity-50 {
+    opacity: 0.5;
+}
+
+/* Card header custom */
+.card-header {
+    border-bottom: 3px solid rgba(0,0,0,0.1);
+    font-weight: bold;
+}
+
+/* Image placeholders */
+.card-img-top {
+    background-color: #e9ecef;
+}
+
+/* Text utilities */
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Shadow utilities */
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Success alert */
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Custom spacing */
+.mb-custom {
+    margin-bottom: 2rem;
+}
+
+.mt-custom {
+    margin-top: 2rem;
+}
+
+/* Stats cards animation */
+.card.text-white {
+    transition: all 0.3s ease;
+}
+
+.card.text-white:hover {
+    transform: scale(1.05);
+}

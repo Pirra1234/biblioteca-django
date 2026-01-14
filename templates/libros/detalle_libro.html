@@ -1,0 +1,144 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ libro.titulo }} - Biblioteca Django{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'libros:inicio' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'libros:lista_libros' %}">Libros</a></li>
+            <li class="breadcrumb-item active">{{ libro.titulo }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Portada del Libro -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if libro.portada %}
+                <img src="{{ libro.portada.url }}" class="card-img-top" alt="{{ libro.titulo }}">
+                {% else %}
+                <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <i class="fas fa-book fa-5x text-white"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="text-center text-primary">${{ libro.precio }}</h4>
+                    <div class="d-grid gap-2">
+                        {% if libro.estado == 'disponible' %}
+                        <button class="btn btn-success" disabled>
+                            <i class="fas fa-check-circle"></i> Disponible
+                        </button>
+                        {% elif libro.estado == 'prestado' %}
+                        <button class="btn btn-danger" disabled>
+                            <i class="fas fa-times-circle"></i> Prestado
+                        </button>
+                        {% else %}
+                        <button class="btn btn-warning" disabled>
+                            <i class="fas fa-tools"></i> En Mantenimiento
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información del Libro -->
+        <div class="col-md-8">
+            <h1 class="mb-3">{{ libro.titulo }}</h1>
+            
+            <div class="mb-3">
+                <span class="badge bg-warning text-dark fs-6">
+                    <i class="fas fa-star"></i> {{ libro.calificacion }} / 5.0
+                </span>
+                <span class="badge bg-info fs-6">
+                    <i class="fas fa-warehouse"></i> Stock: {{ libro.stock }}
+                </span>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Información General</h5>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th width="30%"><i class="fas fa-user text-primary"></i> Autor:</th>
+                                <td>
+                                    <a href="{% url 'libros:detalle_autor' libro.autor.id %}">
+                                        {{ libro.autor.nombre }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-building text-primary"></i> Editorial:</th>
+                                <td>{{ libro.editorial.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-barcode text-primary"></i> ISBN:</th>
+                                <td>{{ libro.isbn }}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-calendar text-primary"></i> Publicación:</th>
+                                <td>{{ libro.fecha_publicacion|date:"d/m/Y" }}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-file-alt text-primary"></i> Páginas:</th>
+                                <td>{{ libro.numero_paginas }} páginas</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-tags text-primary"></i> Categorías:</th>
+                                <td>
+                                    {% for categoria in libro.categorias.all %}
+                                    <span class="badge bg-secondary">{{ categoria.nombre }}</span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-align-left text-primary"></i> Sinopsis</h5>
+                    <p class="card-text">{{ libro.sinopsis }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libros Relacionados -->
+    {% if libros_relacionados %}
+    <section class="mt-5">
+        <h3 class="mb-4">
+            <i class="fas fa-book-open text-primary"></i> Libros Relacionados
+        </h3>
+        <div class="row">
+            {% for libro_rel in libros_relacionados %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm libro-card">
+                    {% if libro_rel.portada %}
+                    <img src="{{ libro_rel.portada.url }}" class="card-img-top" alt="{{ libro_rel.titulo }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-book fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ libro_rel.titulo|truncatewords:5 }}</h6>
+                        <p class="card-text text-muted small">{{ libro_rel.autor.nombre }}</p>
+                        <a href="{% url 'libros:detalle_libro' libro_rel.id %}" class="btn btn-sm btn-primary w-100">
+                            Ver Detalles
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

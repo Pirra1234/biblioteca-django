@@ -1,0 +1,135 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ autor.nombre }} - Biblioteca Django{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'libros:inicio' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'libros:lista_autores' %}">Autores</a></li>
+            <li class="breadcrumb-item active">{{ autor.nombre }}</li>
+        </ol>
+    </nav>
+
+    <!-- Perfil del Autor -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            {% if autor.foto %}
+            <img src="{{ autor.foto.url }}" class="img-fluid rounded-circle shadow" alt="{{ autor.nombre }}">
+            {% else %}
+            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto shadow" 
+                 style="width: 200px; height: 200px;">
+                <i class="fas fa-user fa-5x text-white"></i>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-9">
+            <h1 class="mb-3">{{ autor.nombre }}</h1>
+            
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Información Personal</h5>
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <th width="30%"><i class="fas fa-birthday-cake text-primary"></i> Fecha de Nacimiento:</th>
+                                <td>{{ autor.fecha_nacimiento|date:"d/m/Y" }}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-globe text-primary"></i> País de Origen:</th>
+                                <td>{{ autor.pais_origen }}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-book text-primary"></i> Total de Libros:</th>
+                                <td><span class="badge bg-primary">{{ total_libros }}</span></td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-star text-primary"></i> Calificación Promedio:</th>
+                                <td>
+                                    <span class="badge bg-warning text-dark">{{ calificacion_promedio }} / 5.0</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-align-left text-primary"></i> Biografía</h5>
+                    <p class="card-text">{{ autor.biografia }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libros del Autor -->
+    <section class="mt-5">
+        <h3 class="mb-4">
+            <i class="fas fa-book-open text-primary"></i> Obras de {{ autor.nombre }}
+        </h3>
+        
+        {% if libros %}
+        <div class="row">
+            {% for libro in libros %}
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 shadow-sm libro-card">
+                    {% if libro.portada %}
+                    <img src="{{ libro.portada.url }}" class="card-img-top" alt="{{ libro.titulo }}" 
+                         style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                         style="height: 250px;">
+                        <i class="fas fa-book fa-4x text-white"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ libro.titulo|truncatewords:6 }}</h5>
+                        <p class="card-text text-muted small">
+                            <i class="fas fa-calendar"></i> {{ libro.fecha_publicacion|date:"Y" }}
+                        </p>
+                        
+                        <div class="mb-2">
+                            {% for categoria in libro.categorias.all|slice:":2" %}
+                            <span class="badge bg-secondary">{{ categoria.nombre }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-star"></i> {{ libro.calificacion }}
+                            </span>
+                            {% if libro.estado == 'disponible' %}
+                            <span class="badge bg-success">Disponible</span>
+                            {% elif libro.estado == 'prestado' %}
+                            <span class="badge bg-danger">Prestado</span>
+                            {% else %}
+                            <span class="badge bg-warning">Mantenimiento</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-2">
+                            <strong class="text-primary">${{ libro.precio }}</strong>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <a href="{% url 'libros:detalle_libro' libro.id %}" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Este autor aún no tiene libros registrados en la biblioteca.
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

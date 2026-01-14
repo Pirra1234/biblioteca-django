@@ -1,0 +1,92 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Autores - Biblioteca Django{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">
+        <i class="fas fa-user-edit text-primary"></i> Directorio de Autores
+    </h1>
+
+    <!-- Barra de Búsqueda -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{% url 'libros:lista_autores' %}">
+                <div class="row g-3">
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="q" 
+                               placeholder="Buscar autor por nombre o país..." value="{{ busqueda }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="mb-3">
+        <p class="text-muted">
+            <i class="fas fa-info-circle"></i> 
+            Total de autores: <strong>{{ autores.count }}</strong>
+        </p>
+    </div>
+
+    <div class="row">
+        {% for autor in autores %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm autor-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0">
+                            {% if autor.foto %}
+                            <img src="{{ autor.foto.url }}" class="rounded-circle" 
+                                 style="width: 80px; height: 80px; object-fit: cover;" alt="{{ autor.nombre }}">
+                            {% else %}
+                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center"
+                                 style="width: 80px; height: 80px;">
+                                <i class="fas fa-user fa-2x text-white"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title mb-2">{{ autor.nombre }}</h5>
+                            <p class="card-text text-muted mb-2">
+                                <i class="fas fa-globe"></i> {{ autor.pais_origen }}
+                            </p>
+                            <p class="card-text text-muted mb-2">
+                                <i class="fas fa-birthday-cake"></i> {{ autor.fecha_nacimiento|date:"d/m/Y" }}
+                            </p>
+                            <div class="mb-2">
+                                <span class="badge bg-primary">
+                                    <i class="fas fa-book"></i> {{ autor.total_libros }} libro(s)
+                                </span>
+                                {% if autor.calificacion_promedio %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-star"></i> {{ autor.calificacion_promedio|floatformat:1 }}
+                                </span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text small">{{ autor.biografia|truncatewords:20 }}</p>
+                            <a href="{% url 'libros:detalle_autor' autor.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> Ver Perfil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No se encontraron autores.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
